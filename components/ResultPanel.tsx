@@ -1,18 +1,44 @@
-"use client";
+type Props = {
+  output: string;
+};
 
-export default function ResultPanel() {
+export default function ResultPanel({ output }: Props) {
+  const copyPrompt = async () => {
+    if (!output) return;
+    await navigator.clipboard.writeText(output);
+  };
+
+  const exportTxt = () => {
+    if (!output) return;
+
+    const blob = new Blob([output], {
+      type: "text/plain"
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "cinematic-prompt.txt";
+    a.click();
+
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <aside className="panel p-6 flex flex-col">
-      <h2 className="text-xl font-semibold">AI Output</h2>
+    <aside className="result-panel">
+      <h2>Final Prompt Output</h2>
 
       <textarea
-        className="mt-6 flex-1 rounded-3xl bg-white/5 border border-white/10 p-5"
-        placeholder="Generated prompts / results..."
+        value={output}
+        readOnly
+        placeholder="Generated cinematic prompt will appear here..."
       />
 
-      <button className="mt-4 px-5 py-4 rounded-2xl bg-white text-black font-semibold">
-        Generate
-      </button>
+      <div className="actions">
+        <button onClick={copyPrompt}>Copy Prompt</button>
+        <button onClick={exportTxt}>Export TXT</button>
+      </div>
     </aside>
   );
 }
