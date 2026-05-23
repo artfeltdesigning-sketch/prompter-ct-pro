@@ -10,12 +10,13 @@ html,
 body {
   margin: 0;
   padding: 0;
+  min-height: 100%;
+  font-family: Inter, Arial, sans-serif;
   background:
-    radial-gradient(circle at top right, rgba(99,102,241,0.14), transparent 30%),
+    radial-gradient(circle at top right, rgba(99,102,241,0.15), transparent 35%),
     radial-gradient(circle at bottom left, rgba(6,182,212,0.10), transparent 35%),
     #070b14;
   color: white;
-  font-family: Inter, Arial, sans-serif;
 }
 
 body {
@@ -31,19 +32,17 @@ select {
 
 .app-shell {
   display: grid;
-  grid-template-columns: 280px 1fr 460px;
-  gap: 22px;
+  grid-template-columns: 280px 1fr 420px;
+  gap: 24px;
   min-height: 100vh;
-  padding: 22px;
+  padding: 24px;
 }
 
-.sidebar,
-.workspace,
-.result-panel {
+.glass-panel {
   background: rgba(17, 24, 39, 0.58);
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 28px;
-  backdrop-filter: blur(24px);
+  backdrop-filter: blur(22px);
   box-shadow:
     0 10px 40px rgba(0,0,0,0.35),
     inset 0 1px 0 rgba(255,255,255,0.03);
@@ -51,44 +50,61 @@ select {
 
 .sidebar {
   padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 
-.brand {
+.brand-block h1 {
+  margin: 0;
   font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.03em;
 }
 
-.subtitle {
-  margin-top: 8px;
+.brand-block p {
+  margin: 8px 0 0;
   color: rgba(255,255,255,0.5);
-  font-size: 14px;
 }
 
-.nav {
-  margin-top: 30px;
+.mode-switch {
   display: flex;
-  flex-direction: column;
   gap: 10px;
 }
 
-.nav-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 15px 16px;
-  border-radius: 18px;
+.mode-switch button {
+  flex: 1;
+  padding: 14px;
   border: none;
-  background: transparent;
-  color: rgba(255,255,255,0.78);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.75);
   cursor: pointer;
   transition: all 0.25s ease;
 }
 
-.nav-btn:hover {
-  background: rgba(255,255,255,0.06);
-  color: white;
-  transform: translateY(-1px);
+.mode-switch button.active {
+  background: white;
+  color: black;
+  font-weight: 700;
+}
+
+.sidebar-section label,
+.field label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.55);
+  font-weight: 700;
+}
+
+.sidebar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: rgba(255,255,255,0.55);
+  font-size: 14px;
 }
 
 .workspace {
@@ -96,7 +112,7 @@ select {
   overflow-y: auto;
 }
 
-.workspace-header h1 {
+.workspace-header h2 {
   margin: 0;
   font-size: 34px;
   font-weight: 800;
@@ -108,42 +124,8 @@ select {
   color: rgba(255,255,255,0.55);
 }
 
-.mode-switch {
-  margin-top: 28px;
-  display: inline-flex;
-  padding: 6px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.05);
-  gap: 8px;
-}
-
-.mode-switch button {
-  padding: 12px 18px;
-  border-radius: 14px;
-  border: none;
-  background: transparent;
-  color: rgba(255,255,255,0.6);
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.mode-switch button.active {
-  background: white;
-  color: black;
-  font-weight: 700;
-}
-
 .field {
   margin-top: 22px;
-}
-
-.field label {
-  display: block;
-  margin-bottom: 10px;
-  color: rgba(255,255,255,0.6);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
 }
 
 input,
@@ -167,7 +149,7 @@ select:focus {
 }
 
 textarea {
-  min-height: 150px;
+  min-height: 160px;
   resize: vertical;
 }
 
@@ -177,7 +159,7 @@ textarea {
   gap: 18px;
 }
 
-.chips {
+.chip-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -195,7 +177,6 @@ textarea {
 
 .chip:hover {
   transform: translateY(-1px);
-  color: white;
 }
 
 .chip.active {
@@ -204,78 +185,71 @@ textarea {
   font-weight: 700;
 }
 
-.actions {
+.action-row {
   display: flex;
   gap: 12px;
   margin-top: 28px;
 }
 
-.actions button {
+.primary-btn,
+.secondary-btn {
   flex: 1;
   padding: 15px;
   border-radius: 18px;
   border: none;
-  background: white;
-  color: black;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.25s ease;
 }
 
-.actions button:hover {
+.primary-btn {
+  background: white;
+  color: black;
+}
+
+.secondary-btn {
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover {
   transform: translateY(-2px);
 }
 
 .result-panel {
-  padding: 30px;
+  padding: 28px;
   display: flex;
   flex-direction: column;
 }
 
-.result-top {
+.result-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.result-top h2 {
+.result-header h2 {
   margin: 0;
-  font-size: 24px;
 }
 
-.mini-badge {
+.result-header p {
+  margin-top: 6px;
+  color: rgba(255,255,255,0.5);
+}
+
+.live-badge {
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(34,197,94,0.15);
+  background: rgba(34,197,94,0.16);
   color: #86efac;
   font-size: 12px;
   font-weight: 800;
 }
 
-.decoded-box {
-  margin-top: 20px;
-  padding: 18px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.05);
-}
-
-.decoded-title {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.5);
-}
-
-.decoded-box p {
-  margin: 12px 0 0;
-  line-height: 1.6;
-  color: rgba(255,255,255,0.78);
-}
-
 .result-panel textarea {
   flex: 1;
-  min-height: 420px;
+  min-height: 520px;
   margin-top: 20px;
 }
 
