@@ -1,19 +1,15 @@
 export default function Sidebar() {
   return (
     <aside className="sidebar">
-      <div>
-        <h1 className="brand">PROMPTER CT PRO</h1>
-        <p className="subtitle">AI Creator Studio V2</p>
-      </div>
+      <div className="brand">PROMPTER CT PRO</div>
+      <div className="subtitle">AI Creator MVP</div>
 
-      <nav className="nav">
-        <button className="nav-btn active">Prompt Builder</button>
-        <button className="nav-btn">Presets</button>
-        <button className="nav-btn">AI Models</button>
-        <button className="nav-btn">Reference Director</button>
-        <button className="nav-btn">Motion Engine</button>
-        <button className="nav-btn">Export</button>
-      </nav>
+      <div className="nav">
+        <button className="nav-btn active">Prompt Generator</button>
+        <button className="nav-btn">Image AI</button>
+        <button className="nav-btn">Motion AI</button>
+        <button className="nav-btn">Templates</button>
+      </div>
     </aside>
   );
 }
