@@ -1,12 +1,12 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "PROMPTER CT PRO AI CREATOR",
-  description: "Hollywood cinematic AI creation studio"
+  title: "PROMPTER CT PRO",
+  description: "AI Creator MVP"
 };
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
