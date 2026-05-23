@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import PromptWorkspace from "@/components/PromptWorkspace";
-import ResultPanel from "@/components/ResultPanel";
+import Sidebar from "../components/Sidebar";
+import PromptWorkspace from "../components/PromptWorkspace";
+import ResultPanel from "../components/ResultPanel";
 
 export type AppState = {
   subject: string;
