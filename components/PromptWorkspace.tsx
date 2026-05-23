@@ -1,4 +1,6 @@
-import { AppState } from "../app/page";
+"use client";
+
+import type { AppState } from "../app/page";
 
 type Props = {
   state: AppState;
@@ -7,29 +9,6 @@ type Props = {
   onClear: () => void;
 };
 
-const styles = [
-  "Ultra Realistic Cinematic",
-  "Luxury Commercial",
-  "Dark Moody",
-  "Bollywood Premium",
-  "Architectural Hero"
-];
-
-const lightings = [
-  "Morning Golden Sunlight",
-  "Soft Studio",
-  "Night Neon",
-  "Sunset Glow"
-];
-
-const cameras = [
-  "Hero Shot",
-  "Drone Wide",
-  "Close Up",
-  "Low Angle",
-  "Cinematic Orbit"
-];
-
 export default function PromptWorkspace({
   state,
   setState,
@@ -37,66 +16,102 @@ export default function PromptWorkspace({
   onClear
 }: Props) {
   return (
-    <section className="workspace">
-      <h2>Creative Director Workspace</h2>
+    <main className="workspace">
+      <div className="card">
+        <h2>Creative Director Workspace</h2>
 
-      <div className="field">
-        <label>Subject / Instruction</label>
-        <textarea
-          placeholder="Luxury villa with Indian security guard at gate..."
+        <input
+          placeholder="Subject"
           value={state.subject}
           onChange={(e) =>
             setState({ ...state, subject: e.target.value })
           }
         />
-      </div>
 
-      <div className="field">
-        <label>Style</label>
-        <select
-          value={state.style}
+        <textarea
+          placeholder="Custom cinematic instruction..."
+          value={state.customInstruction}
           onChange={(e) =>
-            setState({ ...state, style: e.target.value })
+            setState({
+              ...state,
+              customInstruction: e.target.value
+            })
           }
-        >
-          {styles.map((item) => (
-            <option key={item}>{item}</option>
-          ))}
-        </select>
-      </div>
+        />
 
-      <div className="field">
-        <label>Lighting</label>
-        <select
+        <div className="row">
+          <select
+            value={state.model}
+            onChange={(e) =>
+              setState({ ...state, model: e.target.value })
+            }
+          >
+            <option>Google Nano Banana 2</option>
+            <option>GPT Image</option>
+            <option>Runway Gen 4</option>
+          </select>
+
+          <select
+            value={state.mode}
+            onChange={(e) =>
+              setState({
+                ...state,
+                mode: e.target.value as "Image" | "Motion"
+              })
+            }
+          >
+            <option>Image</option>
+            <option>Motion</option>
+          </select>
+        </div>
+
+        <input
+          placeholder="Lighting"
           value={state.lighting}
           onChange={(e) =>
             setState({ ...state, lighting: e.target.value })
           }
-        >
-          {lightings.map((item) => (
-            <option key={item}>{item}</option>
-          ))}
-        </select>
-      </div>
+        />
 
-      <div className="field">
-        <label>Camera</label>
-        <select
-          value={state.camera}
+        <input
+          placeholder="Color grading"
+          value={state.color}
           onChange={(e) =>
-            setState({ ...state, camera: e.target.value })
+            setState({ ...state, color: e.target.value })
           }
-        >
-          {cameras.map((item) => (
-            <option key={item}>{item}</option>
-          ))}
-        </select>
-      </div>
+        />
 
-      <div className="actions">
-        <button onClick={onGenerate}>Generate Prompt</button>
-        <button onClick={onClear}>Clear</button>
+        <input
+          placeholder="FX (comma separated)"
+          onChange={(e) =>
+            setState({
+              ...state,
+              fx: e.target.value
+                .split(",")
+                .map((x) => x.trim())
+                .filter(Boolean)
+            })
+          }
+        />
+
+        <input
+          placeholder="Cameras (comma separated)"
+          onChange={(e) =>
+            setState({
+              ...state,
+              cameras: e.target.value
+                .split(",")
+                .map((x) => x.trim())
+                .filter(Boolean)
+            })
+          }
+        />
+
+        <div className="button-row">
+          <button onClick={onGenerate}>Generate</button>
+          <button onClick={onClear}>Clear</button>
+        </div>
       </div>
-    </section>
+    </main>
   );
 }
