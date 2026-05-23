@@ -1,4 +1,4 @@
-import { AppState } from "../app/page";
+import { AppState } from "@/app/page";
 
 type Props = {
   state: AppState;
@@ -7,22 +7,27 @@ type Props = {
   onClear: () => void;
 };
 
-const cameraOptions = [
-  "Hero Shot",
-  "Drone",
-  "Orbit",
-  "Dolly In",
-  "Tracking",
-  "Close Up",
-  "Low Angle"
+const styles = [
+  "Ultra Realistic Cinematic",
+  "Luxury Commercial",
+  "Dark Moody",
+  "Bollywood Premium",
+  "Architectural Hero"
 ];
 
-const fxOptions = [
-  "Volumetric Fog",
-  "Dust Particles",
-  "Light Rays",
-  "Smoke",
-  "Rain"
+const lightings = [
+  "Morning Golden Sunlight",
+  "Soft Studio",
+  "Night Neon",
+  "Sunset Glow"
+];
+
+const cameras = [
+  "Hero Shot",
+  "Drone Wide",
+  "Close Up",
+  "Low Angle",
+  "Cinematic Orbit"
 ];
 
 export default function PromptWorkspace({
@@ -31,155 +36,67 @@ export default function PromptWorkspace({
   onGenerate,
   onClear
 }: Props) {
-  const toggleCamera = (cam: string) => {
-    const exists = state.cameras.includes(cam);
-    setState({
-      ...state,
-      cameras: exists
-        ? state.cameras.filter((c) => c !== cam)
-        : [...state.cameras, cam]
-    });
-  };
-
-  const toggleFx = (fx: string) => {
-    const exists = state.fx.includes(fx);
-    setState({
-      ...state,
-      fx: exists
-        ? state.fx.filter((f) => f !== fx)
-        : [...state.fx, fx]
-    });
-  };
-
   return (
-    <main className="workspace">
+    <section className="workspace">
       <h2>Creative Director Workspace</h2>
 
       <div className="field">
-        <label>AI MODEL</label>
-        <select
-          value={state.model}
-          onChange={(e) =>
-            setState({ ...state, model: e.target.value })
-          }
-        >
-          <option>Google Nano Banana 2</option>
-          <option>Google Pro</option>
-          <option>Kling</option>
-          <option>Veo</option>
-          <option>Sora</option>
-        </select>
-      </div>
-
-      <div className="field">
-        <label>MODE</label>
-        <select
-          value={state.mode}
-          onChange={(e) =>
-            setState({
-              ...state,
-              mode: e.target.value as "Image" | "Motion"
-            })
-          }
-        >
-          <option>Image</option>
-          <option>Motion</option>
-        </select>
-      </div>
-
-      <div className="field">
-        <label>SUBJECT / SCENE</label>
-        <input
+        <label>Subject / Instruction</label>
+        <textarea
+          placeholder="Luxury villa with Indian security guard at gate..."
           value={state.subject}
           onChange={(e) =>
             setState({ ...state, subject: e.target.value })
           }
-          placeholder="Luxury villa, Indian guard at gate..."
         />
       </div>
 
       <div className="field">
-        <label>CUSTOM INSTRUCTION</label>
-        <textarea
-          value={state.customInstruction}
+        <label>Style</label>
+        <select
+          value={state.style}
           onChange={(e) =>
-            setState({
-              ...state,
-              customInstruction: e.target.value
-            })
+            setState({ ...state, style: e.target.value })
           }
-          placeholder="messy English allowed..."
-        />
-      </div>
-
-      <div className="field">
-        <label>CAMERA</label>
-        <div className="chips">
-          {cameraOptions.map((cam) => (
-            <button
-              key={cam}
-              className={`chip ${
-                state.cameras.includes(cam) ? "active" : ""
-              }`}
-              onClick={() => toggleCamera(cam)}
-            >
-              {cam}
-            </button>
+        >
+          {styles.map((item) => (
+            <option key={item}>{item}</option>
           ))}
-        </div>
+        </select>
       </div>
 
       <div className="field">
-        <label>LIGHTING</label>
+        <label>Lighting</label>
         <select
           value={state.lighting}
           onChange={(e) =>
             setState({ ...state, lighting: e.target.value })
           }
         >
-          <option>Morning Golden Sunlight</option>
-          <option>Sunset Orange</option>
-          <option>Blue Hour</option>
-          <option>Moonlight Cinematic</option>
+          {lightings.map((item) => (
+            <option key={item}>{item}</option>
+          ))}
         </select>
       </div>
 
       <div className="field">
-        <label>COLOR GRADING</label>
+        <label>Camera</label>
         <select
-          value={state.color}
+          value={state.camera}
           onChange={(e) =>
-            setState({ ...state, color: e.target.value })
+            setState({ ...state, camera: e.target.value })
           }
         >
-          <option>Realistic Natural</option>
-          <option>Hollywood Blockbuster</option>
-          <option>Netflix Cinematic</option>
-          <option>Warm Luxury</option>
-        </select>
-      </div>
-
-      <div className="field">
-        <label>ENVIRONMENT FX</label>
-        <div className="chips">
-          {fxOptions.map((fx) => (
-            <button
-              key={fx}
-              className={`chip ${
-                state.fx.includes(fx) ? "active" : ""
-              }`}
-              onClick={() => toggleFx(fx)}
-            >
-              {fx}
-            </button>
+          {cameras.map((item) => (
+            <option key={item}>{item}</option>
           ))}
-        </div>
+        </select>
       </div>
 
       <div className="actions">
         <button onClick={onGenerate}>Generate Prompt</button>
         <button onClick={onClear}>Clear</button>
       </div>
-    </main>
+    </section>
   );
 }
