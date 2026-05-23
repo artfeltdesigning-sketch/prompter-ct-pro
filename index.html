@@ -1,235 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROMPTER CT PRO</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PROMPTER CT PRO MAX</title>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #0a0a0a, #111827);
-    color: white;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-.container {
-    max-width: 1500px;
-    margin: auto;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-}
-
-.card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 24px;
-    padding: 24px;
-    backdrop-filter: blur(12px);
-}
-
-h1 {
-    font-size: 38px;
-    margin-bottom: 20px;
-}
-
-h2 {
-    margin-bottom: 15px;
-}
-
-h3 {
-    margin: 18px 0 10px;
-    font-size: 15px;
-    color: #d1d5db;
-}
-
-select, input, textarea {
-    width: 100%;
-    padding: 14px;
-    border-radius: 14px;
-    border: none;
-    background: #1f2937;
-    color: white;
-    font-size: 14px;
-}
-
-textarea {
-    min-height: 650px;
-    resize: vertical;
-}
-
-button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 14px;
-    transition: 0.3s;
-}
-
-.primary {
-    background: white;
-    color: black;
-}
-
-.primary:hover {
-    transform: scale(1.02);
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-@media (max-width: 900px) {
-    .container {
-        grid-template-columns: 1fr;
-    }
-
-    .grid {
-        grid-template-columns: 1fr;
-    }
-}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#060b18,#111827);color:#fff;padding:20px} .wrap{max-width:1600px;margin:auto;display:grid;grid-template-columns:2fr 1fr;gap:20px}.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(16px);border-radius:24px;padding:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{padding:10px 14px;border-radius:999px;background:#1f2937;cursor:pointer;user-select:none}.chip.active{background:#fff;color:#000}select,input,textarea,button{width:100%;padding:14px;border:none;border-radius:14px;background:#1f2937;color:#fff;margin-top:10px}button{background:#fff;color:#000;font-weight:700;cursor:pointer}.hidden{display:none}textarea{min-height:780px}#preview img{max-width:100px;border-radius:10px;margin:6px}@media(max-width:1000px){.wrap,.grid{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
-
-<div class="container">
-
-    <div class="card">
-        <h1>PROMPTER CT PRO</h1>
-
-        <div class="grid">
-            <div>
-                <h3>AI MODEL</h3>
-                <select id="model">
-                    <option>Kling</option>
-                    <option>Veo</option>
-                    <option>Runway</option>
-                    <option>Sora</option>
-                    <option>Midjourney</option>
-                    <option>Flux</option>
-                    <option>Leonardo</option>
-                </select>
-            </div>
-
-            <div>
-                <h3>MODE</h3>
-                <select id="mode">
-                    <option>Image</option>
-                    <option>Motion</option>
-                    <option>Transformation</option>
-                    <option>Commercial Ad</option>
-                    <option>Luxury Interior</option>
-                    <option>Architecture</option>
-                    <option>Logo Animation</option>
-                </select>
-            </div>
-        </div>
-
-        <h3>SUBJECT / SCENE</h3>
-        <input id="subject" value="Luxury cinematic subject">
-
-        <h3>CAMERA ANGLES / MOVEMENT</h3>
-        <input id="camera" value="Hero Shot, Dolly In, Orbit">
-
-        <h3>LIGHTING</h3>
-        <input id="lighting" value="Morning Golden Sunlight, Volumetric God Rays">
-
-        <h3>COLOR GRADING</h3>
-        <input id="grading" value="Hollywood Blockbuster">
-
-        <h3>ENVIRONMENT FX</h3>
-        <input id="fx" value="Fog, Dust Particles, Light Rays">
-
-        <div class="grid">
-            <div>
-                <h3>DURATION</h3>
-                <input id="duration" value="5 sec">
-            </div>
-
-            <div>
-                <h3>ASPECT RATIO</h3>
-                <select id="ratio">
-                    <option>9:16</option>
-                    <option>16:9</option>
-                    <option>1:1</option>
-                    <option>4:5</option>
-                    <option>21:9</option>
-                </select>
-            </div>
-        </div>
-
-        <h3>NEGATIVE PROMPT</h3>
-        <input id="negative" value="blurry, low quality, distorted anatomy, cheap AI artifacts, jitter">
-
-        <button class="primary" onclick="generatePrompt()">GENERATE PROMPT</button>
-    </div>
-
-    <div class="card">
-        <h2>FINAL PROMPT</h2>
-        <textarea id="output"></textarea>
-        <button class="primary" onclick="copyPrompt()">COPY PROMPT</button>
-    </div>
-
+<div class="wrap">
+<div class="card">
+<h1>PROMPTER CT PRO MAX</h1>
+<div class="grid">
+<div><label>AI MODEL</label><select id="model"></select></div>
+<div><label>MODE</label><select id="mode"></select></div>
 </div>
-
+<div><label>SUBJECT / SCENE</label><select id="subject"></select></div>
+<div><label>CAMERA ANGLES / MOVEMENT</label><div id="cameraChips" class="chips"></div></div>
+<div><label>LIGHTING</label><select id="lighting"></select></div>
+<div><label>COLOR GRADING</label><select id="grading"></select></div>
+<div><label>ENVIRONMENT FX</label><div id="fxChips" class="chips"></div></div>
+<div id="motionBlock" class="grid hidden">
+<div><label>DURATION</label><select id="duration"></select></div>
+<div><label>MOTION STYLE</label><select id="motionStyle"></select></div>
+</div>
+<div id="transformBlock" class="hidden">
+<label>TRANSFORMATION TYPE</label><select id="transformType"></select>
+</div>
+<div class="grid">
+<div>
+<label>REFERENCE IMAGE</label>
+<input type="file" id="refImage" accept="image/*" />
+</div>
+<div>
+<label>END FRAME (TRANSFORMATION)</label>
+<input type="file" id="endImage" accept="image/*" />
+</div>
+</div>
+<div><label>REFERENCE MODE</label><select id="refMode"></select></div>
+<div id="preview"></div>
+<button onclick="generatePrompt()">GENERATE PROMPT</button>
+</div>
+<div class="card">
+<h2>FINAL PROMPT</h2>
+<textarea id="output"></textarea>
+<button onclick="navigator.clipboard.writeText(output.value)">COPY PROMPT</button>
+</div>
+</div>
 <script>
-function get(id) {
-    return document.getElementById(id).value;
+const DATA={
+models:['Google Nano Banana 2','Google Pro','Kling','Veo','Runway','Sora','Midjourney','Flux','Leonardo','Imagen','Pika','Hailuo'],
+modes:['Image','Motion','Transformation'],
+subjects:['Luxury Real Estate','Cinematic Portrait','Product Commercial','Car Commercial','Sci-Fi City','Ancient Temple','Netflix Thriller','Bollywood Hero','Transformers VFX'],
+cameras:['Hero Shot','Low Angle','Close Up','Extreme Close Up','Wide Shot','Drone','Dolly In','Dolly Out','Orbit','Tracking','Crane','Steadicam','Push In','Parallax','Whip Pan'],
+lighting:['Morning Golden Sunlight','Soft Morning','Sunset Orange','Blue Hour','Moonlight Cinematic','Volumetric God Rays','Moody Dark','Cyberpunk Night'],
+grading:['Hollywood Blockbuster','Netflix Cinematic','Bollywood Premium','Apple Commercial','Teal Orange','Realistic Natural'],
+fx:['Fog','Dust Particles','Light Rays','Smoke','Rain','Snow','Lens Flare','Embers'],
+durations:['3 sec','5 sec','8 sec','10 sec'],
+motionStyles:['Buttery Smooth','Cinematic Fast','Slow Reveal','Commercial Smooth'],
+transformTypes:['Mechanical Morph','Energy Transform','Smooth Morph','Logo to 3D Object'],
+refModes:['Composition Reference','Lighting Reference','Style Reference','Character Reference','Transformation Start Frame']
+};
+function fill(id,items){const el=document.getElementById(id); items.forEach(i=>el.add(new Option(i,i)));}
+['model','mode','subject','lighting','grading','duration','motionStyle','transformType','refMode'].forEach((id,idx)=>fill(id,Object.values(DATA)[idx]));
+function chips(id,items){const el=document.getElementById(id);items.forEach(i=>{const c=document.createElement('div');c.className='chip';c.textContent=i;c.onclick=()=>c.classList.toggle('active');el.appendChild(c);});}
+chips('cameraChips',DATA.cameras); chips('fxChips',DATA.fx);
+function selected(id){return [...document.querySelectorAll('#'+id+' .active')].map(x=>x.textContent).join(', ');}
+function toggleUI(){const m=mode.value; motionBlock.classList.toggle('hidden',m==='Image'); transformBlock.classList.toggle('hidden',m!=='Transformation');}
+mode.onchange=()=>{toggleUI();generatePrompt();};
+function previewFile(input){if(!input.files[0]) return; const reader=new FileReader(); reader.onload=e=>{const img=document.createElement('img'); img.src=e.target.result; preview.appendChild(img);}; reader.readAsDataURL(input.files[0]);}
+refImage.onchange=()=>{preview.innerHTML=''; previewFile(refImage); if(endImage.files[0]) previewFile(endImage);}; endImage.onchange=()=>{preview.innerHTML=''; if(refImage.files[0]) previewFile(refImage); previewFile(endImage);};
+function modelSyntax(model){ if(model.includes('Kling')) return 'cinematic motion optimized for Kling'; if(model.includes('Veo')) return 'natural video realism optimized for Veo'; if(model.includes('Google')) return 'high fidelity prompt optimized for Google video/image models'; return 'premium cinematic prompt optimization'; }
+function generatePrompt(){
+const m=mode.value;
+let p=`AI MODEL: ${model.value}\nMODE: ${m}\nSUBJECT: ${subject.value}\nCAMERA: ${selected('cameraChips')||'Hero Shot'}\nLIGHTING: ${lighting.value}\nCOLOR GRADING: ${grading.value}\nENVIRONMENT FX: ${selected('fxChips')||'Fog'}\nREFERENCE MODE: ${refMode.value}\n`;
+if(m!=='Image') p+=`DURATION: ${duration.value}\nMOTION STYLE: ${motionStyle.value}\n`;
+if(m==='Transformation') p+=`TRANSFORMATION: ${transformType.value}\n`;
+if(refImage.files[0]) p+='REFERENCE IMAGE: uploaded\n';
+if(endImage.files[0]) p+='END FRAME IMAGE: uploaded\n';
+p+=`\nFINAL READY PROMPT:\n${modelSyntax(model.value)}, ultra realistic 8K HDR, Hollywood premium cinematic quality, hyper detailed composition, subject ${subject.value}, camera ${selected('cameraChips')||'Hero Shot'}, lighting ${lighting.value}, color grade ${grading.value}, environmental effects ${selected('fxChips')||'Fog'}.`;
+output.value=p;
 }
-
-function generatePrompt() {
-    let mode = get("mode");
-
-    let motionText = "";
-    if (mode !== "Image") {
-        motionText = "buttery smooth cinematic motion, realistic physics, motion blur, stable professional camera movement, natural acceleration, ";
-    }
-
-    let transformText = "";
-    if (mode === "Transformation" || mode === "Logo Animation") {
-        transformText = "Hollywood VFX transformation, realistic morphing, seamless frame continuity, ";
-    }
-
-    let prompt =
-`AI MODEL: ${get("model")}
-MODE: ${mode}
-ASPECT RATIO: ${get("ratio")}
-DURATION: ${get("duration")}
-
-FINAL READY PROMPT:
-
-Ultra realistic, 8K HDR cinematic quality, hyper detailed, Hollywood blockbuster visual style, premium composition, depth of field, realistic reflections, volumetric lighting, ${motionText}${transformText}
-SUBJECT: ${get("subject")}
-CAMERA: ${get("camera")}
-LIGHTING: ${get("lighting")}
-COLOR GRADING: ${get("grading")}
-FX: ${get("fx")}
-NEGATIVE: ${get("negative")}`;
-
-    document.getElementById("output").value = prompt;
-}
-
-function copyPrompt() {
-    navigator.clipboard.writeText(document.getElementById("output").value);
-    alert("Prompt copied!");
-}
-
-generatePrompt();
+toggleUI(); generatePrompt();
 </script>
-
 </body>
 </html>
