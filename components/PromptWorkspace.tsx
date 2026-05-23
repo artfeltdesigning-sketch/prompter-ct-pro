@@ -1,4 +1,4 @@
-import { AppState } from "@/app/page";
+import { AppState } from "../app/page";
 
 type Props = {
   state: AppState;
