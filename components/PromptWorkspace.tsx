@@ -1,6 +1,6 @@
 "use client";
 
-import type { AppState } from "../app/page";
+import { AppState } from "../app/page";
 
 type Props = {
   state: AppState;
@@ -9,47 +9,66 @@ type Props = {
   onClear: () => void;
 };
 
-const cameraOptions = [
+const imageCameras = [
   "Hero Shot",
   "Close Up",
   "Extreme Close Up",
   "Low Angle",
-  "Drone Reveal",
+  "High Angle",
+  "Wide Shot",
+  "Ultra Wide",
+  "Architectural Perspective",
+  "Drone Top View",
+  "Cinematic Orbit"
+];
+
+const motionCameras = [
+  "Smooth Dolly Push",
+  "Orbit Reveal",
   "FPV Flythrough",
-  "Cinematic Orbit",
+  "Drone Pull Back",
   "Tracking Shot",
-  "Dolly In",
-  "Crane Rise"
+  "Crane Rise",
+  "Parallax Move",
+  "Steadicam Walk",
+  "Gimbal Follow",
+  "Helicopter Reveal"
 ];
 
 const lightingOptions = [
-  "Morning Golden Sunlight",
-  "Sunset Glow",
+  "Golden Hour Cinematic",
+  "Soft Natural Daylight",
+  "Netflix Moody",
   "Blue Hour",
+  "Sunset Orange",
+  "Luxury Interior Warm",
+  "Overcast Editorial",
   "Night Neon",
-  "Soft Studio",
-  "Moody Cinematic"
+  "Volumetric God Rays"
 ];
 
 const lutOptions = [
+  "Netflix Contrast",
   "Hollywood Blockbuster",
-  "Netflix Dark",
-  "Luxury Commercial",
+  "Apple Commercial",
+  "Luxury Real Estate",
+  "Kodak Film",
+  "Teal Orange",
   "Dune LUT",
-  "Blade Runner LUT",
-  "Natural Premium"
+  "Blade Runner LUT"
 ];
 
 const environmentOptions = [
+  "Cloud Sky",
   "Rain",
   "Fog",
   "Smoke",
-  "Cloud Sky",
   "Storm",
-  "Dust",
-  "Snow",
   "Luxury Interior",
-  "Realistic Sky"
+  "Modern Exterior",
+  "Realistic Sky",
+  "Sun Rays",
+  "Dust Atmosphere"
 ];
 
 export default function PromptWorkspace({
@@ -58,59 +77,57 @@ export default function PromptWorkspace({
   onGenerate,
   onClear
 }: Props) {
-  const toggleEnv = (item: string) => {
-    const exists = state.environment.includes(item);
+  const toggleEnvironment = (env: string) => {
+    const exists = state.environment.includes(env);
 
     setState({
       ...state,
       environment: exists
-        ? state.environment.filter((x) => x !== item)
-        : [...state.environment, item]
+        ? state.environment.filter((item) => item !== env)
+        : [...state.environment, env]
     });
   };
 
+  const cameraList =
+    state.mode === "image"
+      ? imageCameras
+      : motionCameras;
+
   return (
-    <section className="workspace">
+    <section className="workspace glass-panel">
       <div className="workspace-header">
-        <h1>Creative Director Workspace</h1>
-        <p>AI decodes your idea into production-grade prompts.</p>
-      </div>
-
-      <div className="mode-switch">
-        <button
-          className={state.mode === "image" ? "active" : ""}
-          onClick={() => setState({ ...state, mode: "image" })}
-        >
-          Image
-        </button>
-
-        <button
-          className={state.mode === "motion" ? "active" : ""}
-          onClick={() => setState({ ...state, mode: "motion" })}
-        >
-          Motion
-        </button>
+        <h2>Creative Director Workspace</h2>
+        <p>
+          AI decodes messy instructions into
+          production-grade prompts.
+        </p>
       </div>
 
       <div className="field">
-        <label>SUBJECT / SCENE</label>
+        <label>SUBJECT</label>
         <input
           value={state.subject}
           onChange={(e) =>
-            setState({ ...state, subject: e.target.value })
+            setState({
+              ...state,
+              subject: e.target.value
+            })
           }
           placeholder="Luxury Ahmedabad villa..."
         />
       </div>
 
       <div className="field">
-        <label>AI INSTRUCTION</label>
+        <label>AI INSTRUCTION (ANY LANGUAGE)</label>
         <textarea
           value={state.instruction}
           onChange={(e) =>
-            setState({ ...state, instruction: e.target.value })
+            setState({
+              ...state,
+              instruction: e.target.value
+            })
           }
-          placeholder="Any language. AI will decode intelligently."
+          placeholder="Gujarati / Hindi / English / Hinglish..."
         />
       </div>
 
@@ -118,13 +135,25 @@ export default function PromptWorkspace({
         <div className="field">
           <label>CAMERA</label>
           <select
-            value={state.camera}
+            value={
+              state.mode === "image"
+                ? state.camera
+                : state.motionCamera
+            }
             onChange={(e) =>
-              setState({ ...state, camera: e.target.value })
+              state.mode === "image"
+                ? setState({
+                    ...state,
+                    camera: e.target.value
+                  })
+                : setState({
+                    ...state,
+                    motionCamera: e.target.value
+                  })
             }
           >
-            {cameraOptions.map((item) => (
-              <option key={item}>{item}</option>
+            {cameraList.map((camera) => (
+              <option key={camera}>{camera}</option>
             ))}
           </select>
         </div>
@@ -134,50 +163,72 @@ export default function PromptWorkspace({
           <select
             value={state.lighting}
             onChange={(e) =>
-              setState({ ...state, lighting: e.target.value })
+              setState({
+                ...state,
+                lighting: e.target.value
+              })
             }
           >
-            {lightingOptions.map((item) => (
-              <option key={item}>{item}</option>
+            {lightingOptions.map((light) => (
+              <option key={light}>{light}</option>
             ))}
           </select>
         </div>
 
         <div className="field">
-          <label>COLOR LUT</label>
+          <label>LUT</label>
           <select
             value={state.lut}
             onChange={(e) =>
-              setState({ ...state, lut: e.target.value })
+              setState({
+                ...state,
+                lut: e.target.value
+              })
             }
           >
-            {lutOptions.map((item) => (
-              <option key={item}>{item}</option>
+            {lutOptions.map((lut) => (
+              <option key={lut}>{lut}</option>
             ))}
           </select>
         </div>
       </div>
 
       <div className="field">
-        <label>ENVIRONMENT FX</label>
-        <div className="chips">
-          {environmentOptions.map((item) => (
+        <label>ENVIRONMENT ENGINE</label>
+
+        <div className="chip-grid">
+          {environmentOptions.map((env) => (
             <button
-              key={item}
+              key={env}
               className={`chip ${
-                state.environment.includes(item) ? "active" : ""
+                state.environment.includes(env)
+                  ? "active"
+                  : ""
               }`}
-              onClick={() => toggleEnv(item)}
+              onClick={() =>
+                toggleEnvironment(env)
+              }
             >
-              {item}
+              {env}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="actions">
-        <button onClick={onGenerate}>Generate Prompt</button>
-        <button onClick={onClear}>Clear</button>
+      <div className="action-row">
+        <button
+          className="primary-btn"
+          onClick={onGenerate}
+        >
+          Generate Prompt
+        </button>
+
+        <button
+          className="secondary-btn"
+          onClick={onClear}
+        >
+          Clear
+        </button>
       </div>
     </section>
   );
