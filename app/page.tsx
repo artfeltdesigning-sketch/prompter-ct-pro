@@ -5,50 +5,102 @@ import Sidebar from "../components/Sidebar";
 import PromptWorkspace from "../components/PromptWorkspace";
 import ResultPanel from "../components/ResultPanel";
 
+export type PromptMode = "image" | "motion";
+
 export type AppState = {
+  mode: PromptMode;
   subject: string;
-  style: string;
-  lighting: string;
+  instruction: string;
   camera: string;
+  lighting: string;
+  lut: string;
+  environment: string[];
   output: string;
+  decodedIntent: string;
 };
 
 const defaultState: AppState = {
+  mode: "image",
   subject: "",
-  style: "Ultra Realistic Cinematic",
-  lighting: "Morning Golden Sunlight",
+  instruction: "",
   camera: "Hero Shot",
-  output: ""
+  lighting: "Morning Golden Sunlight",
+  lut: "Hollywood Blockbuster",
+  environment: [],
+  output: "",
+  decodedIntent: ""
 };
 
+function decodeIntent(state: AppState) {
+  return `AI understands: user wants a premium ${state.mode} cinematic creative with ${state.camera}, ${state.lighting}, ${state.lut} styling.`;
+}
+
 function buildPrompt(state: AppState) {
+  const env =
+    state.environment.length > 0
+      ? state.environment.join(", ")
+      : "clean cinematic environment";
+
+  const motionBlock =
+    state.mode === "motion"
+      ? `
+MOTION DIRECTOR:
+buttery smooth motion,
+realistic physics,
+stable professional movement,
+cinematic motion blur,
+natural acceleration/deceleration,
+camera choreography,
+premium cinematic pacing
+`
+      : "";
+
   return `FINAL READY PROMPT ONLY:
 
-Ultra realistic 8K HDR, Hollywood production quality, premium cinematic composition, realistic shadows, volumetric lighting, atmospheric depth, hyper detailed textures.
+Ultra realistic 8K HDR
+Hollywood production quality
+premium cinematic composition
+volumetric lighting
+hyper detailed textures
+realistic shadows
+atmospheric depth
+zero cheap AI artifacts
 
 SUBJECT:
-${state.subject || "Custom cinematic subject"}
+${state.subject}
 
-STYLE:
-${state.style}
-
-LIGHTING:
-${state.lighting}
+AI INTERPRETED INSTRUCTION:
+${state.instruction}
 
 CAMERA:
 ${state.camera}
 
+LIGHTING:
+${state.lighting}
+
+COLOR LUT:
+${state.lut}
+
+ENVIRONMENT:
+${env}
+
+${motionBlock}
+
 FINAL OUTPUT:
-Create a premium cinematic AI visual with blockbuster realism, zero cheap AI artifacts, professional composition and commercial quality.`;
+Create a premium cinematic ${state.mode} with blockbuster realism and production-grade quality.`;
 }
 
 export default function Home() {
   const [state, setState] = useState<AppState>(defaultState);
 
-  const generatePrompt = () => {
+  const generate = () => {
+    const decodedIntent = decodeIntent(state);
+    const output = buildPrompt(state);
+
     setState({
       ...state,
-      output: buildPrompt(state)
+      decodedIntent,
+      output
     });
   };
 
@@ -62,10 +114,10 @@ export default function Home() {
       <PromptWorkspace
         state={state}
         setState={setState}
-        onGenerate={generatePrompt}
+        onGenerate={generate}
         onClear={clearAll}
       />
-      <ResultPanel output={state.output} />
+      <ResultPanel state={state} />
     </main>
   );
 }
