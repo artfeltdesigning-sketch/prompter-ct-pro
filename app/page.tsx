@@ -11,7 +11,9 @@ export type AppState = {
   mode: PromptMode;
   subject: string;
   instruction: string;
+  style: string;
   camera: string;
+  motionCamera: string;
   lighting: string;
   lut: string;
   environment: string[];
@@ -23,54 +25,84 @@ const defaultState: AppState = {
   mode: "image",
   subject: "",
   instruction: "",
+  style: "Ultra Realistic Cinematic",
   camera: "Hero Shot",
-  lighting: "Morning Golden Sunlight",
-  lut: "Hollywood Blockbuster",
+  motionCamera: "Smooth Dolly Push",
+  lighting: "Golden Hour Cinematic",
+  lut: "Netflix Contrast",
   environment: [],
   output: "",
-  decodedIntent: ""
+  decodedIntent: "",
 };
 
 function decodeIntent(state: AppState) {
-  return `AI understands: user wants a premium ${state.mode} cinematic creative with ${state.camera}, ${state.lighting}, ${state.lut} styling.`;
+  return `AI understands user wants: ${state.subject}. Instruction intent decoded with cinematic intelligence.`;
 }
 
 function buildPrompt(state: AppState) {
-  const env =
-    state.environment.length > 0
-      ? state.environment.join(", ")
-      : "clean cinematic environment";
+  const env = state.environment.length
+    ? state.environment.join(", ")
+    : "Natural cinematic environment";
 
-  const motionBlock =
-    state.mode === "motion"
-      ? `
-MOTION DIRECTOR:
-buttery smooth motion,
-realistic physics,
-stable professional movement,
-cinematic motion blur,
-natural acceleration/deceleration,
-camera choreography,
-premium cinematic pacing
-`
-      : "";
+  if (state.mode === "motion") {
+    return `FINAL READY MOTION PROMPT ONLY:
 
-  return `FINAL READY PROMPT ONLY:
+AI CREATIVE DIRECTOR INTELLIGENCE:
+${state.decodedIntent}
 
-Ultra realistic 8K HDR
-Hollywood production quality
-premium cinematic composition
-volumetric lighting
-hyper detailed textures
-realistic shadows
-atmospheric depth
-zero cheap AI artifacts
+MODE:
+Motion AI
 
 SUBJECT:
 ${state.subject}
 
-AI INTERPRETED INSTRUCTION:
+USER INSTRUCTION:
 ${state.instruction}
+
+STYLE:
+${state.style}
+
+CAMERA:
+${state.motionCamera}
+
+LIGHTING:
+${state.lighting}
+
+COLOR LUT:
+${state.lut}
+
+ENVIRONMENT:
+${env}
+
+MOTION ENGINE:
+Buttery smooth cinematic motion,
+realistic motion physics,
+natural acceleration and deceleration,
+professional stabilized camera movement,
+premium Hollywood pacing,
+realistic environmental interaction,
+commercial-grade cinematic choreography.
+
+FINAL OUTPUT:
+Generate premium blockbuster realistic cinematic motion output with zero cheap AI artifacts.`;
+  }
+
+  return `FINAL READY IMAGE PROMPT ONLY:
+
+AI CREATIVE DIRECTOR INTELLIGENCE:
+${state.decodedIntent}
+
+MODE:
+Image AI
+
+SUBJECT:
+${state.subject}
+
+USER INSTRUCTION:
+${state.instruction}
+
+STYLE:
+${state.style}
 
 CAMERA:
 ${state.camera}
@@ -84,23 +116,21 @@ ${state.lut}
 ENVIRONMENT:
 ${env}
 
-${motionBlock}
-
 FINAL OUTPUT:
-Create a premium cinematic ${state.mode} with blockbuster realism and production-grade quality.`;
+Generate premium ultra realistic cinematic visual with Hollywood composition, blockbuster realism, perfect depth, luxury commercial quality, zero cheap AI artifacts.`;
 }
 
 export default function Home() {
   const [state, setState] = useState<AppState>(defaultState);
 
-  const generate = () => {
-    const decodedIntent = decodeIntent(state);
-    const output = buildPrompt(state);
+  const generatePrompt = () => {
+    const decoded = decodeIntent(state);
+    const updated = { ...state, decodedIntent: decoded };
+    const output = buildPrompt(updated);
 
     setState({
-      ...state,
-      decodedIntent,
-      output
+      ...updated,
+      output,
     });
   };
 
@@ -110,14 +140,16 @@ export default function Home() {
 
   return (
     <main className="app-shell">
-      <Sidebar />
+      <Sidebar state={state} setState={setState} />
+
       <PromptWorkspace
         state={state}
         setState={setState}
-        onGenerate={generate}
+        onGenerate={generatePrompt}
         onClear={clearAll}
       />
-      <ResultPanel state={state} />
+
+      <ResultPanel output={state.output} />
     </main>
   );
 }
