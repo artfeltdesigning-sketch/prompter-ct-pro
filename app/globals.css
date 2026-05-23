@@ -10,9 +10,9 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(180deg, #060b16, #0d1422);
+  background: #070b14;
   color: white;
+  font-family: Inter, Arial, sans-serif;
 }
 
 body {
@@ -23,17 +23,17 @@ body {
   display: grid;
   grid-template-columns: 260px 1fr 420px;
   gap: 20px;
-  padding: 20px;
   min-height: 100vh;
+  padding: 20px;
 }
 
 .sidebar,
 .workspace,
 .result-panel {
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 24px;
+  backdrop-filter: blur(20px);
 }
 
 .sidebar {
@@ -51,7 +51,7 @@ body {
 }
 
 .nav {
-  margin-top: 28px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -61,14 +61,11 @@ body {
   padding: 14px;
   border-radius: 16px;
   border: none;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.06);
   color: white;
   cursor: pointer;
-  transition: 0.25s ease;
-  text-align: left;
 }
 
-.nav-btn:hover,
 .nav-btn.active {
   background: white;
   color: black;
@@ -76,13 +73,11 @@ body {
 
 .workspace {
   padding: 28px;
-  overflow-y: auto;
 }
 
 .workspace h2,
 .result-panel h2 {
   margin-top: 0;
-  font-size: 28px;
 }
 
 .field {
@@ -91,49 +86,22 @@ body {
 
 .field label {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: rgba(255,255,255,0.65);
-  font-size: 13px;
-  font-weight: 600;
 }
 
-input,
-select,
-textarea {
+textarea,
+select {
   width: 100%;
-  padding: 14px 16px;
+  padding: 14px;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.05);
   color: white;
-  outline: none;
 }
 
 textarea {
   min-height: 140px;
-  resize: vertical;
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.chip {
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: none;
-  background: rgba(255,255,255,0.06);
-  color: white;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.chip:hover,
-.chip.active {
-  background: white;
-  color: black;
 }
 
 .actions {
@@ -142,20 +110,15 @@ textarea {
   margin-top: 24px;
 }
 
-.actions button {
-  flex: 1;
-  padding: 14px;
+.actions button,
+.copy-btn {
+  padding: 14px 18px;
   border-radius: 16px;
   border: none;
   background: white;
   color: black;
   font-weight: 700;
   cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.actions button:hover {
-  transform: translateY(-2px);
 }
 
 .result-panel {
@@ -167,7 +130,7 @@ textarea {
 .result-panel textarea {
   flex: 1;
   min-height: 500px;
-  margin-top: 20px;
+  margin: 20px 0;
 }
 
 @media (max-width: 1200px) {
