@@ -1,42 +1,81 @@
-import {
-  Sparkles,
-  ImageIcon,
-  Clapperboard,
-  Camera,
-  Sun,
-  Cloud,
-  Settings
-} from "lucide-react";
+import { AppState } from "../app/page";
 
-const items = [
-  { icon: Sparkles, label: "AI Brain" },
-  { icon: ImageIcon, label: "Image Studio" },
-  { icon: Clapperboard, label: "Motion Studio" },
-  { icon: Camera, label: "Camera Engine" },
-  { icon: Sun, label: "Lighting Lab" },
-  { icon: Cloud, label: "Environment FX" },
-  { icon: Settings, label: "Settings" }
+type Props = {
+  state: AppState;
+  setState: React.Dispatch<React.SetStateAction<AppState>>;
+};
+
+const imageStyles = [
+  "Ultra Realistic Cinematic",
+  "Luxury Commercial",
+  "Architectural Editorial",
+  "Hollywood Blockbuster",
+  "Netflix Prestige",
+  "Fashion Editorial",
+  "Apple Commercial",
 ];
 
-export default function Sidebar() {
+const motionStyles = [
+  "Hollywood Motion",
+  "Commercial Ad Motion",
+  "Luxury Real Estate Motion",
+  "Cinematic Action Motion",
+  "Smooth Documentary Motion",
+];
+
+export default function Sidebar({ state, setState }: Props) {
+  const styles =
+    state.mode === "image" ? imageStyles : motionStyles;
+
   return (
-    <aside className="sidebar">
-      <div>
-        <div className="brand">PROMPTER CT PRO</div>
-        <div className="subtitle">AI Creative OS 2026</div>
+    <aside className="sidebar glass-panel">
+      <div className="brand-block">
+        <h1>PROMPTER CT PRO</h1>
+        <p>AI Creative Director OS</p>
       </div>
 
-      <div className="nav">
-        {items.map((item) => {
-          const Icon = item.icon;
+      <div className="mode-switch">
+        <button
+          className={state.mode === "image" ? "active" : ""}
+          onClick={() =>
+            setState({ ...state, mode: "image" })
+          }
+        >
+          IMAGE AI
+        </button>
 
-          return (
-            <button key={item.label} className="nav-btn">
-              <Icon size={18} />
-              <span>{item.label}</span>
-            </button>
-          );
-        })}
+        <button
+          className={state.mode === "motion" ? "active" : ""}
+          onClick={() =>
+            setState({ ...state, mode: "motion" })
+          }
+        >
+          MOTION AI
+        </button>
+      </div>
+
+      <div className="sidebar-section">
+        <label>Creative Style</label>
+
+        <select
+          value={state.style}
+          onChange={(e) =>
+            setState({
+              ...state,
+              style: e.target.value,
+            })
+          }
+        >
+          {styles.map((style) => (
+            <option key={style}>{style}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="sidebar-info">
+        <div>AI Brain: ACTIVE</div>
+        <div>Multi-language Decode: ENABLED</div>
+        <div>Trend Intelligence: ENABLED</div>
       </div>
     </aside>
   );
