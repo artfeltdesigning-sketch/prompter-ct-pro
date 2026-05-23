@@ -1,57 +1,55 @@
-import React, { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-
-const MODELS = ['Google Nano Banana 2','Google Pro','Kling','Veo','Runway','Sora','Midjourney','Flux'];
-const PRESETS = ['Luxury Real Estate','Apple Commercial','Netflix Thriller','Bollywood Poster','Transformers VFX'];
-const CAMERAS = ['Hero','Drone','Dolly In','Orbit','Tracking','Close Up','Wide','POV'];
-const LIGHTS = ['Morning Golden','Sunset Orange','Blue Hour','Moonlight','God Rays'];
-const COLORS = ['Apple Premium','Hollywood','Netflix','Bollywood','Ultra Real'];
-const FX = ['Fog','Dust','Light Rays','Smoke','Rain'];
-
-function Chips({items, selected, setSelected, single=false}) {
-  const toggle = (item) => single ? setSelected(item) : setSelected(selected.includes(item)?selected.filter(i=>i!==item):[...selected,item]);
-  return <div className='flex flex-wrap gap-2'>{items.map(i=><button key={i} onClick={()=>toggle(i)} className={`px-4 py-2 rounded-full transition ${single ? selected===i ? 'bg-white text-black':'bg-white/10' : selected.includes(i)?'bg-white text-black':'bg-white/10'}`}>{i}</button>)}</div>
-}
-
-export default function AppleV4(){
-  const [model,setModel]=useState(MODELS[0]);
-  const [preset,setPreset]=useState(PRESETS[0]);
-  const [mode,setMode]=useState('Image');
-  const [cams,setCams]=useState(['Hero']);
-  const [light,setLight]=useState(LIGHTS[0]);
-  const [color,setColor]=useState(COLORS[0]);
-  const [fx,setFx]=useState(['Fog']);
-  const [refNote,setRefNote]=useState('same composition but premium luxury styling');
-
-  const prompt = useMemo(()=>`AI MODEL: ${model}\nMODE: ${mode}\nPRESET: ${preset}\nCAMERA: ${cams.join(', ')}\nLIGHTING: ${light}\nCOLOR: ${color}\nFX: ${fx.join(', ')}\nREFERENCE NOTE: ${refNote}\n\nFINAL PROMPT:\nHigh fidelity prompt optimized for ${model}, Apple-grade cinematic visual design, ultra realistic 8K HDR, premium composition, ${preset}, camera ${cams.join(', ')}, ${light} lighting, ${color} grading, environmental ${fx.join(', ')}, reference direction: ${refNote}.`, [model,mode,preset,cams,light,color,fx,refNote]);
-
-  return <div className='min-h-screen bg-black text-white'>
-    <motion.div initial={{opacity:0}} animate={{opacity:1}} className='max-w-7xl mx-auto p-8'>
-      <div className='mb-10'>
-        <h1 className='text-6xl font-semibold tracking-tight'>PROMPTER CT PRO</h1>
-        <p className='text-white/60 mt-3 text-xl'>Apple-grade cinematic prompt operating system.</p>
-      </div>
-      <div className='grid lg:grid-cols-3 gap-6'>
-        <Card className='lg:col-span-2 bg-white/5 border-white/10 rounded-3xl'><CardContent className='p-8 space-y-8'>
-          <section><h2 className='text-xl mb-4'>AI Models</h2><Chips items={MODELS} selected={model} setSelected={setModel} single /></section>
-          <section><h2 className='text-xl mb-4'>Preset Packs</h2><Chips items={PRESETS} selected={preset} setSelected={setPreset} single /></section>
-          <section><h2 className='text-xl mb-4'>Mode</h2><Chips items={['Image','Motion','Transformation']} selected={mode} setSelected={setMode} single /></section>
-          <section><h2 className='text-xl mb-4'>Camera System</h2><Chips items={CAMERAS} selected={cams} setSelected={setCams} /></section>
-          <section><h2 className='text-xl mb-4'>Lighting</h2><Chips items={LIGHTS} selected={light} setSelected={setLight} single /></section>
-          <section><h2 className='text-xl mb-4'>Color Engine</h2><Chips items={COLORS} selected={color} setSelected={setColor} single /></section>
-          <section><h2 className='text-xl mb-4'>Environment FX</h2><Chips items={FX} selected={fx} setSelected={setFx} /></section>
-          <section><h2 className='text-xl mb-4'>Reference Director</h2><Input value={refNote} onChange={(e)=>setRefNote(e.target.value)} className='bg-white/10 border-0 rounded-2xl' /></section>
-        </CardContent></Card>
-        <Card className='bg-white/5 border-white/10 rounded-3xl'><CardContent className='p-8 space-y-4'>
-          <h2 className='text-2xl'>Prompt Output</h2>
-          <Textarea value={prompt} readOnly className='min-h-[700px] bg-white/10 border-0 rounded-2xl' />
-          <Button onClick={()=>navigator.clipboard.writeText(prompt)} className='w-full rounded-2xl'>Copy Prompt</Button>
-        </CardContent></Card>
-      </div>
-    </motion.div>
-  </div>
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROMPTER CT PRO APPLE V4</title>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(180deg,#050816,#0f172a);color:white;padding:20px}*{box-sizing:border-box}.wrap{max-width:1500px;margin:auto;display:grid;grid-template-columns:2fr 1fr;gap:24px}.card{background:rgba(255,255,255,.06);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.08);border-radius:28px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.4)}h1{font-size:56px;margin:0 0 8px}p{color:rgba(255,255,255,.65)}select,input,textarea,button{width:100%;padding:14px;border:none;border-radius:16px;background:rgba(255,255,255,.08);color:white;margin-top:10px}textarea{min-height:700px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}.chip{padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.08);cursor:pointer;transition:.25s}.chip.active,.chip:hover{background:white;color:black;transform:translateY(-2px)}button{background:white;color:black;font-weight:700;cursor:pointer}.hidden{display:none}#preview img{max-width:100px;border-radius:14px;margin:8px}@media(max-width:1000px){.wrap,.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+<h1>PROMPTER CT PRO</h1><p>Apple-grade cinematic prompt operating system</p>
+<div class="grid">
+<select id="model"></select>
+<select id="mode"></select>
+</div>
+<select id="quality"></select>
+<select id="preset"></select>
+<select id="subject"></select>
+<div id="cameraChips" class="chips"></div>
+<select id="lighting"></select>
+<select id="grading"></select>
+<div id="fxChips" class="chips"></div>
+<div id="motionBlock" class="grid hidden"><select id="duration"></select><select id="motionStyle"></select></div>
+<div id="transformBlock" class="hidden"><select id="transformType"></select></div>
+<input type="file" id="refImage" accept="image/*">
+<input type="file" id="endImage" accept="image/*">
+<select id="refMode"></select>
+<textarea id="customRef" placeholder="same composition but luxury villa, preserve framing"></textarea>
+<div id="preview"></div>
+<button onclick="generatePrompt()">Generate Prompt</button>
+</div>
+<div class="card">
+<textarea id="output"></textarea>
+<button onclick="navigator.clipboard.writeText(output.value)">Copy Prompt</button>
+</div>
+</div>
+<script>
+const DATA={model:['Google Nano Banana 2','Google Pro','Kling','Veo','Runway','Sora'],mode:['Image','Motion','Transformation'],quality:['Fast','Premium','Hollywood','Ultra Realism','Commercial Ad'],preset:['Luxury Real Estate','Apple Commercial','Netflix Thriller','Bollywood Poster','Transformers VFX'],subject:['Luxury Villa','Supercar Reveal','Cinematic Hero Portrait','Sci-Fi City','Premium Product'],lighting:['Morning Golden','Sunset Orange','Blue Hour','Moonlight','God Rays'],grading:['Apple Premium','Hollywood','Netflix','Bollywood'],duration:['3 sec','5 sec','8 sec'],motionStyle:['Buttery Smooth','Commercial Smooth','Slow Reveal'],transformType:['Mechanical Morph','Smooth Morph'],refMode:['Composition','Lighting','Style','Character'],cams:['Hero','Drone','Orbit','Dolly In','Tracking','Close Up'],fx:['Fog','Dust','Light Rays','Smoke','Rain']};
+function fill(id,arr){arr.forEach(v=>document.getElementById(id).add(new Option(v,v)));}
+['model','mode','quality','preset','subject','lighting','grading','duration','motionStyle','transformType','refMode'].forEach(k=>fill(k,DATA[k]));
+function chips(id,arr){arr.forEach(v=>{let d=document.createElement('div');d.className='chip';d.innerText=v;d.onclick=()=>d.classList.toggle('active');document.getElementById(id).appendChild(d);});}
+chips('cameraChips',DATA.cams);chips('fxChips',DATA.fx);
+function selected(id){return [...document.querySelectorAll('#'+id+' .active')].map(x=>x.innerText).join(', ')||'Default';}
+function toggleUI(){motionBlock.classList.toggle('hidden',mode.value==='Image');transformBlock.classList.toggle('hidden',mode.value!=='Transformation');}
+mode.onchange=()=>{toggleUI();generatePrompt();};
+function previewFile(input){if(!input.files[0])return;let r=new FileReader();r.onload=e=>{let img=document.createElement('img');img.src=e.target.result;preview.appendChild(img)};r.readAsDataURL(input.files[0]);}
+refImage.onchange=()=>{preview.innerHTML='';previewFile(refImage);previewFile(endImage)};endImage.onchange=()=>{preview.innerHTML='';previewFile(refImage);previewFile(endImage)};
+function generatePrompt(){output.value=`AI MODEL: ${model.value}\nMODE: ${mode.value}\nQUALITY: ${quality.value}\nPRESET: ${preset.value}\nSUBJECT: ${subject.value}\nCAMERA: ${selected('cameraChips')}\nLIGHTING: ${lighting.value}\nCOLOR: ${grading.value}\nFX: ${selected('fxChips')}\nREFERENCE: ${refMode.value}\nCUSTOM REF: ${customRef.value}\n${mode.value!=='Image'?'DURATION: '+duration.value+'\nMOTION: '+motionStyle.value:''}${mode.value==='Transformation'?'\nTRANSFORMATION: '+transformType.value:''}\n\nFINAL PROMPT:\nHigh fidelity prompt optimized for ${model.value}, Apple-grade cinematic luxury visual design, ultra realistic 8K HDR, premium composition, ${preset.value}, ${subject.value}, camera ${selected('cameraChips')}, ${lighting.value} lighting, ${grading.value} grading, environmental ${selected('fxChips')}, custom direction ${customRef.value||'none'}.`;}
+toggleUI();generatePrompt();
+</script>
+</body>
+</html>
