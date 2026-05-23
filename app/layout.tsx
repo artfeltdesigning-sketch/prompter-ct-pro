@@ -1,8 +1,14 @@
 import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
-export const metadata = {
+const inter = Inter({
+  subsets: ["latin"]
+});
+
+export const metadata: Metadata = {
   title: "PROMPTER CT PRO",
-  description: "AI Creator MVP"
+  description: "AI Creative Operating System"
 };
 
 export default function RootLayout({
