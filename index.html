@@ -1,55 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROMPTER CT PRO APPLE V4</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROMPTER CT PRO V5</title>
 <style>
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(180deg,#050816,#0f172a);color:white;padding:20px}*{box-sizing:border-box}.wrap{max-width:1500px;margin:auto;display:grid;grid-template-columns:2fr 1fr;gap:24px}.card{background:rgba(255,255,255,.06);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.08);border-radius:28px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.4)}h1{font-size:56px;margin:0 0 8px}p{color:rgba(255,255,255,.65)}select,input,textarea,button{width:100%;padding:14px;border:none;border-radius:16px;background:rgba(255,255,255,.08);color:white;margin-top:10px}textarea{min-height:700px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}.chip{padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.08);cursor:pointer;transition:.25s}.chip.active,.chip:hover{background:white;color:black;transform:translateY(-2px)}button{background:white;color:black;font-weight:700;cursor:pointer}.hidden{display:none}#preview img{max-width:100px;border-radius:14px;margin:8px}@media(max-width:1000px){.wrap,.grid{grid-template-columns:1fr}}
-</style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:radial-gradient(circle at top,#111827,#030712);color:#fff} .app{display:grid;grid-template-columns:320px 1fr 520px;min-height:100vh;gap:20px;padding:20px}.panel{background:rgba(255,255,255,.06);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:20px}.brand{font-size:28px;font-weight:700}.sub{color:rgba(255,255,255,.6);font-size:13px}.section{margin-top:18px}.label{font-size:12px;color:#cbd5e1;margin-bottom:8px}.select,textarea,input{width:100%;padding:14px;border:none;border-radius:16px;background:rgba(255,255,255,.08);color:#fff}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.08);cursor:pointer;transition:.2s}.chip.active{background:#fff;color:#000} textarea{min-height:160px;resize:vertical}.output{min-height:78vh}.drop{border:2px dashed rgba(255,255,255,.2);padding:18px;border-radius:18px;text-align:center}.btn{width:100%;padding:14px;border:none;border-radius:16px;background:#fff;color:#000;font-weight:700;cursor:pointer}.hero{padding:8px 0 20px}.hidden{display:none} #preview img{max-width:90px;border-radius:12px;margin:6px}@media(max-width:1300px){.app{grid-template-columns:1fr}} </style>
 </head>
 <body>
-<div class="wrap">
-<div class="card">
-<h1>PROMPTER CT PRO</h1><p>Apple-grade cinematic prompt operating system</p>
-<div class="grid">
-<select id="model"></select>
-<select id="mode"></select>
+<div class='app'>
+<div class='panel'>
+<div class='brand'>PROMPTER CT PRO</div><div class='sub'>Hollywood Cinematic Prompt Operating System</div>
+<div class='section'><div class='label'>AI MODEL</div><select id='model' class='select'></select></div>
+<div class='section'><div class='label'>MODE</div><select id='mode' class='select'></select></div>
+<div class='section'><div class='label'>QUALITY</div><select id='quality' class='select'></select></div>
+<div class='section'><div class='label'>PRESET PACK</div><select id='preset' class='select'></select></div>
 </div>
-<select id="quality"></select>
-<select id="preset"></select>
-<select id="subject"></select>
-<div id="cameraChips" class="chips"></div>
-<select id="lighting"></select>
-<select id="grading"></select>
-<div id="fxChips" class="chips"></div>
-<div id="motionBlock" class="grid hidden"><select id="duration"></select><select id="motionStyle"></select></div>
-<div id="transformBlock" class="hidden"><select id="transformType"></select></div>
-<input type="file" id="refImage" accept="image/*">
-<input type="file" id="endImage" accept="image/*">
-<select id="refMode"></select>
-<textarea id="customRef" placeholder="same composition but luxury villa, preserve framing"></textarea>
-<div id="preview"></div>
-<button onclick="generatePrompt()">Generate Prompt</button>
+<div class='panel'>
+<div class='hero'><h2>Creative Director Workspace</h2><div class='sub'>Guide your reference and scene direction</div></div>
+<div class='section'><div class='label'>SUBJECT / SCENE</div><select id='subject' class='select'></select></div>
+<div class='section'><div class='label'>CAMERA SYSTEM</div><div id='cameraChips' class='chips'></div></div>
+<div class='section'><div class='label'>LIGHTING</div><select id='lighting' class='select'></select></div>
+<div class='section'><div class='label'>COLOR GRADING</div><select id='grading' class='select'></select></div>
+<div class='section'><div class='label'>ENVIRONMENT FX</div><div id='fxChips' class='chips'></div></div>
+<div id='motionWrap' class='section hidden'><div class='label'>DURATION</div><select id='duration' class='select'></select></div>
+<div class='section'><div class='label'>REFERENCE IMAGE</div><div class='drop'><input type='file' id='refImage' accept='image/*'></div></div>
+<div class='section'><div class='label'>REFERENCE CONTROL</div><select id='refMode' class='select'></select></div>
+<div class='section'><div class='label'>CUSTOM INSTRUCTION (messy text allowed)</div><textarea id='instruction' placeholder='same house but sunset more rich and indian guard at gate'></textarea></div>
+<div id='preview'></div>
 </div>
-<div class="card">
-<textarea id="output"></textarea>
-<button onclick="navigator.clipboard.writeText(output.value)">Copy Prompt</button>
+<div class='panel'>
+<div class='hero'><h2>Final Prompt</h2><div class='sub'>Ready to copy</div></div>
+<textarea id='output' class='select output'></textarea>
+<button class='btn' onclick='generatePrompt()'>Generate Prompt</button><br><br>
+<button class='btn' onclick='navigator.clipboard.writeText(output.value)'>Copy Prompt</button>
 </div>
 </div>
 <script>
-const DATA={model:['Google Nano Banana 2','Google Pro','Kling','Veo','Runway','Sora'],mode:['Image','Motion','Transformation'],quality:['Fast','Premium','Hollywood','Ultra Realism','Commercial Ad'],preset:['Luxury Real Estate','Apple Commercial','Netflix Thriller','Bollywood Poster','Transformers VFX'],subject:['Luxury Villa','Supercar Reveal','Cinematic Hero Portrait','Sci-Fi City','Premium Product'],lighting:['Morning Golden','Sunset Orange','Blue Hour','Moonlight','God Rays'],grading:['Apple Premium','Hollywood','Netflix','Bollywood'],duration:['3 sec','5 sec','8 sec'],motionStyle:['Buttery Smooth','Commercial Smooth','Slow Reveal'],transformType:['Mechanical Morph','Smooth Morph'],refMode:['Composition','Lighting','Style','Character'],cams:['Hero','Drone','Orbit','Dolly In','Tracking','Close Up'],fx:['Fog','Dust','Light Rays','Smoke','Rain']};
-function fill(id,arr){arr.forEach(v=>document.getElementById(id).add(new Option(v,v)));}
-['model','mode','quality','preset','subject','lighting','grading','duration','motionStyle','transformType','refMode'].forEach(k=>fill(k,DATA[k]));
-function chips(id,arr){arr.forEach(v=>{let d=document.createElement('div');d.className='chip';d.innerText=v;d.onclick=()=>d.classList.toggle('active');document.getElementById(id).appendChild(d);});}
-chips('cameraChips',DATA.cams);chips('fxChips',DATA.fx);
-function selected(id){return [...document.querySelectorAll('#'+id+' .active')].map(x=>x.innerText).join(', ')||'Default';}
-function toggleUI(){motionBlock.classList.toggle('hidden',mode.value==='Image');transformBlock.classList.toggle('hidden',mode.value!=='Transformation');}
-mode.onchange=()=>{toggleUI();generatePrompt();};
-function previewFile(input){if(!input.files[0])return;let r=new FileReader();r.onload=e=>{let img=document.createElement('img');img.src=e.target.result;preview.appendChild(img)};r.readAsDataURL(input.files[0]);}
-refImage.onchange=()=>{preview.innerHTML='';previewFile(refImage);previewFile(endImage)};endImage.onchange=()=>{preview.innerHTML='';previewFile(refImage);previewFile(endImage)};
-function generatePrompt(){output.value=`AI MODEL: ${model.value}\nMODE: ${mode.value}\nQUALITY: ${quality.value}\nPRESET: ${preset.value}\nSUBJECT: ${subject.value}\nCAMERA: ${selected('cameraChips')}\nLIGHTING: ${lighting.value}\nCOLOR: ${grading.value}\nFX: ${selected('fxChips')}\nREFERENCE: ${refMode.value}\nCUSTOM REF: ${customRef.value}\n${mode.value!=='Image'?'DURATION: '+duration.value+'\nMOTION: '+motionStyle.value:''}${mode.value==='Transformation'?'\nTRANSFORMATION: '+transformType.value:''}\n\nFINAL PROMPT:\nHigh fidelity prompt optimized for ${model.value}, Apple-grade cinematic luxury visual design, ultra realistic 8K HDR, premium composition, ${preset.value}, ${subject.value}, camera ${selected('cameraChips')}, ${lighting.value} lighting, ${grading.value} grading, environmental ${selected('fxChips')}, custom direction ${customRef.value||'none'}.`;}
-toggleUI();generatePrompt();
+const DATA={model:['Google Nano Banana 2','Google Pro','Kling','Veo','Runway','Sora','Midjourney'],mode:['Image','Motion','Transformation'],quality:['Fast','Premium','Hollywood','Ultra Realism'],preset:['Luxury Real Estate','Bollywood Poster','Product Commercial','Action Trailer'],subject:['Luxury Villa','Security Gate Scene','Supercar Reveal','Mythological Hero'],lighting:['Morning Golden Sunlight','Sunset Orange','Blue Hour','Moonlight Cinematic','Volumetric God Rays'],grading:['Hollywood Blockbuster','Netflix Cinematic','Bollywood Premium','Apple Luxury'],duration:['3 sec','5 sec','8 sec'],refMode:['Composition Reference','Lighting Reference','Style Reference','Character Reference'],cams:['Hero Shot','Low Angle','Drone','Orbit','Dolly In','Tracking','Close Up'],fx:['Volumetric Fog','Dust Particles','Light Rays','Smoke','Rain']};
+Object.keys(DATA).forEach(k=>{let el=document.getElementById(k);if(el&&el.tagName==='SELECT')DATA[k].forEach(v=>el.add(new Option(v,v)));});
+function mkchips(id,arr){arr.forEach(v=>{let d=document.createElement('div');d.className='chip';d.innerText=v;d.onclick=()=>d.classList.toggle('active');document.getElementById(id).appendChild(d);});}
+mkchips('cameraChips',DATA.cams);mkchips('fxChips',DATA.fx);
+function sel(id){let a=[...document.querySelectorAll('#'+id+' .active')].map(x=>x.innerText);return a.length?a.join(', '):'Auto cinematic selection';}
+mode.onchange=()=>motionWrap.classList.toggle('hidden',mode.value==='Image');
+refImage.onchange=e=>{preview.innerHTML='';if(e.target.files[0]){let r=new FileReader();r.onload=x=>{let img=document.createElement('img');img.src=x.target.result;preview.appendChild(img)};r.readAsDataURL(e.target.files[0]);}};
+function cleanInstruction(t){if(!t)return 'no extra custom direction'; return t.replace(/\b(hous)\b/ig,'house').replace(/\b(gard)\b/ig,'guard');}
+function generatePrompt(){let inst=cleanInstruction(instruction.value); output.value=`You are my personal Hollywood-level Cinematic AI Director and Prompt Engineer. Always generate ultra-premium prompts with ultra realistic 8K HDR cinematic quality, premium composition, realistic shadows, volumetric lighting, film-grade aesthetics, zero cheap AI artifacts.\n\nAI MODEL: ${model.value}\nMODE: ${mode.value}\nQUALITY: ${quality.value}\nPRESET: ${preset.value}\nSUBJECT: ${subject.value}\nCAMERA: ${sel('cameraChips')}\nLIGHTING: ${lighting.value}\nCOLOR GRADING: ${grading.value}\nENVIRONMENT FX: ${sel('fxChips')}\nREFERENCE CONTROL: ${refMode.value}\n${mode.value!=='Image'?'DURATION: '+duration.value+'\n':''}${refImage.files[0]?'REFERENCE IMAGE: uploaded\n':''}\nFINAL READY PROMPT ONLY:\nHigh fidelity prompt optimized for ${model.value}, ${quality.value} cinematic output, subject ${subject.value}, preserve ${refMode.value.toLowerCase()} from uploaded reference image, camera ${sel('cameraChips')}, lighting ${lighting.value}, color grading ${grading.value}, environmental effects ${sel('fxChips')}, custom instruction: ${inst}.`;}
+generatePrompt();
 </script>
-</body>
-</html>
+</body></html>
