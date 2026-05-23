@@ -1,90 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PROMPTER CT PRO MAX</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#060b18,#111827);color:#fff;padding:20px} .wrap{max-width:1600px;margin:auto;display:grid;grid-template-columns:2fr 1fr;gap:20px}.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(16px);border-radius:24px;padding:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{padding:10px 14px;border-radius:999px;background:#1f2937;cursor:pointer;user-select:none}.chip.active{background:#fff;color:#000}select,input,textarea,button{width:100%;padding:14px;border:none;border-radius:14px;background:#1f2937;color:#fff;margin-top:10px}button{background:#fff;color:#000;font-weight:700;cursor:pointer}.hidden{display:none}textarea{min-height:780px}#preview img{max-width:100px;border-radius:10px;margin:6px}@media(max-width:1000px){.wrap,.grid{grid-template-columns:1fr}}
-</style>
-</head>
-<body>
-<div class="wrap">
-<div class="card">
-<h1>PROMPTER CT PRO V3 MAX</h1>
-<div class="grid">
-<div><label>AI MODEL</label><select id="model"></select></div>
-<div><label>MODE</label><select id="mode"></select></div>
-</div>
-<div><label>PRESET PACK</label><select id="presetPack"><option>Luxury Real Estate</option><option>Bollywood Poster</option><option>Netflix Thriller</option><option>Apple Commercial</option><option>Transformers VFX</option><option>Product Commercial</option></select></div><div><label>QUALITY ENGINE</label><select id="qualityEngine"><option>Fast</option><option>Premium</option><option>Hollywood</option><option>Ultra Realism</option><option>Commercial Ad</option></select></div><div><label>SUBJECT / SCENE</label><select id="subject"></select></div>
-<div><label>CAMERA ANGLES / MOVEMENT</label><div id="cameraChips" class="chips"></div></div>
-<div><label>LIGHTING</label><select id="lighting"></select></div>
-<div><label>COLOR GRADING</label><select id="grading"></select></div>
-<div><label>ENVIRONMENT FX</label><div id="fxChips" class="chips"></div></div>
-<div id="motionBlock" class="grid hidden">
-<div><label>DURATION</label><select id="duration"></select></div>
-<div><label>MOTION STYLE</label><select id="motionStyle"></select></div>
-</div>
-<div id="transformBlock" class="hidden">
-<label>TRANSFORMATION TYPE</label><select id="transformType"></select>
-</div>
-<div class="grid">
-<div>
-<label>REFERENCE IMAGE</label>
-<input type="file" id="refImage" accept="image/*" />
-</div>
-<div>
-<label>END FRAME (TRANSFORMATION)</label>
-<input type="file" id="endImage" accept="image/*" />
-</div>
-</div>
-<div><label>REFERENCE MODE</label><select id="refMode"></select></div><div><label>CUSTOM REFERENCE INSTRUCTION</label><textarea id="customRef" style="min-height:120px" placeholder="Example: same composition but luxury villa, same lighting but sunset, preserve framing"></textarea></div>
-<div id="preview"></div>
-<button onclick="generatePrompt()">GENERATE PROMPT</button>
-</div>
-<div class="card">
-<h2>FINAL PROMPT</h2>
-<textarea id="output"></textarea>
-<button onclick="navigator.clipboard.writeText(output.value)">COPY PROMPT</button>
-</div>
-</div>
-<script>
-const DATA={
-models:['Google Nano Banana 2','Google Pro','Kling','Veo','Runway','Sora','Midjourney','Flux','Leonardo','Imagen','Pika','Hailuo'],
-modes:['Image','Motion','Transformation'],
-subjects:['Luxury Real Estate','Cinematic Portrait','Product Commercial','Car Commercial','Sci-Fi City','Ancient Temple','Netflix Thriller','Bollywood Hero','Transformers VFX'],
-cameras:['Hero Shot','Low Angle','Close Up','Extreme Close Up','Wide Shot','Drone','Dolly In','Dolly Out','Orbit','Tracking','Crane','Steadicam','Push In','Parallax','Whip Pan'],
-lighting:['Morning Golden Sunlight','Soft Morning','Sunset Orange','Blue Hour','Moonlight Cinematic','Volumetric God Rays','Moody Dark','Cyberpunk Night'],
-grading:['Hollywood Blockbuster','Netflix Cinematic','Bollywood Premium','Apple Commercial','Teal Orange','Realistic Natural'],
-fx:['Fog','Dust Particles','Light Rays','Smoke','Rain','Snow','Lens Flare','Embers'],
-durations:['3 sec','5 sec','8 sec','10 sec'],
-motionStyles:['Buttery Smooth','Cinematic Fast','Slow Reveal','Commercial Smooth'],
-transformTypes:['Mechanical Morph','Energy Transform','Smooth Morph','Logo to 3D Object'],
-refModes:['Composition Reference','Lighting Reference','Style Reference','Character Reference','Transformation Start Frame']
-};
-function fill(id,items){const el=document.getElementById(id); items.forEach(i=>el.add(new Option(i,i)));}
-['model','mode','subject','lighting','grading','duration','motionStyle','transformType','refMode'].forEach((id,idx)=>fill(id,Object.values(DATA)[idx]));
-function chips(id,items){const el=document.getElementById(id);items.forEach(i=>{const c=document.createElement('div');c.className='chip';c.textContent=i;c.onclick=()=>c.classList.toggle('active');el.appendChild(c);});}
-chips('cameraChips',DATA.cameras); chips('fxChips',DATA.fx);
-function selected(id){return [...document.querySelectorAll('#'+id+' .active')].map(x=>x.textContent).join(', ');}
-function toggleUI(){const m=mode.value; motionBlock.classList.toggle('hidden',m==='Image'); transformBlock.classList.toggle('hidden',m!=='Transformation');}
-mode.onchange=()=>{toggleUI();generatePrompt();};
-function previewFile(input){if(!input.files[0]) return; const reader=new FileReader(); reader.onload=e=>{const img=document.createElement('img'); img.src=e.target.result; preview.appendChild(img);}; reader.readAsDataURL(input.files[0]);}
-refImage.onchange=()=>{preview.innerHTML=''; previewFile(refImage); if(endImage.files[0]) previewFile(endImage);}; endImage.onchange=()=>{preview.innerHTML=''; if(refImage.files[0]) previewFile(refImage); previewFile(endImage);};
-function modelSyntax(model){ if(model.includes('Kling')) return 'cinematic motion optimized for Kling'; if(model.includes('Veo')) return 'natural video realism optimized for Veo'; if(model.includes('Google')) return 'high fidelity prompt optimized for Google video/image models'; return 'premium cinematic prompt optimization'; }
-function qualitySyntax(q){if(q==='Fast') return 'fast optimized cinematic prompt'; if(q==='Hollywood') return 'Hollywood blockbuster cinematic language'; if(q==='Ultra Realism') return 'ultra photoreal hyper realism'; if(q==='Commercial Ad') return 'premium commercial advertising visual language'; return 'premium cinematic optimization';}
-function generatePrompt(){
-const m=mode.value;
-let p=`AI MODEL: ${model.value}\nMODE: ${m}\nSUBJECT: ${subject.value}\nCAMERA: ${selected('cameraChips')||'Hero Shot'}\nLIGHTING: ${lighting.value}\nCOLOR GRADING: ${grading.value}\nENVIRONMENT FX: ${selected('fxChips')||'Fog'}\nREFERENCE MODE: ${refMode.value}\n`;
-if(m!=='Image') p+=`DURATION: ${duration.value}\nMOTION STYLE: ${motionStyle.value}\n`;
-if(m==='Transformation') p+=`TRANSFORMATION: ${transformType.value}\n`;
-if(refImage.files[0]) p+='REFERENCE IMAGE: uploaded\n';
-if(endImage.files[0]) p+='END FRAME IMAGE: uploaded\n';
-p+=`\nFINAL READY PROMPT:
-${modelSyntax(model.value)}, ${qualitySyntax(qualityEngine.value)}, preset style ${presetPack.value}, ultra realistic 8K HDR, Hollywood premium cinematic quality, hyper detailed composition, subject ${subject.value}, camera ${selected('cameraChips')||'Hero Shot'}, lighting ${lighting.value}, color grade ${grading.value}, environmental effects ${selected('fxChips')||'Fog'}, custom reference instruction: ${customRef.value || 'none'}.`;
-output.value=p;
+import React, { useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+
+const MODELS = ['Google Nano Banana 2','Google Pro','Kling','Veo','Runway','Sora','Midjourney','Flux'];
+const PRESETS = ['Luxury Real Estate','Apple Commercial','Netflix Thriller','Bollywood Poster','Transformers VFX'];
+const CAMERAS = ['Hero','Drone','Dolly In','Orbit','Tracking','Close Up','Wide','POV'];
+const LIGHTS = ['Morning Golden','Sunset Orange','Blue Hour','Moonlight','God Rays'];
+const COLORS = ['Apple Premium','Hollywood','Netflix','Bollywood','Ultra Real'];
+const FX = ['Fog','Dust','Light Rays','Smoke','Rain'];
+
+function Chips({items, selected, setSelected, single=false}) {
+  const toggle = (item) => single ? setSelected(item) : setSelected(selected.includes(item)?selected.filter(i=>i!==item):[...selected,item]);
+  return <div className='flex flex-wrap gap-2'>{items.map(i=><button key={i} onClick={()=>toggle(i)} className={`px-4 py-2 rounded-full transition ${single ? selected===i ? 'bg-white text-black':'bg-white/10' : selected.includes(i)?'bg-white text-black':'bg-white/10'}`}>{i}</button>)}</div>
 }
-toggleUI(); generatePrompt();
-</script>
-</body>
-</html>
+
+export default function AppleV4(){
+  const [model,setModel]=useState(MODELS[0]);
+  const [preset,setPreset]=useState(PRESETS[0]);
+  const [mode,setMode]=useState('Image');
+  const [cams,setCams]=useState(['Hero']);
+  const [light,setLight]=useState(LIGHTS[0]);
+  const [color,setColor]=useState(COLORS[0]);
+  const [fx,setFx]=useState(['Fog']);
+  const [refNote,setRefNote]=useState('same composition but premium luxury styling');
+
+  const prompt = useMemo(()=>`AI MODEL: ${model}\nMODE: ${mode}\nPRESET: ${preset}\nCAMERA: ${cams.join(', ')}\nLIGHTING: ${light}\nCOLOR: ${color}\nFX: ${fx.join(', ')}\nREFERENCE NOTE: ${refNote}\n\nFINAL PROMPT:\nHigh fidelity prompt optimized for ${model}, Apple-grade cinematic visual design, ultra realistic 8K HDR, premium composition, ${preset}, camera ${cams.join(', ')}, ${light} lighting, ${color} grading, environmental ${fx.join(', ')}, reference direction: ${refNote}.`, [model,mode,preset,cams,light,color,fx,refNote]);
+
+  return <div className='min-h-screen bg-black text-white'>
+    <motion.div initial={{opacity:0}} animate={{opacity:1}} className='max-w-7xl mx-auto p-8'>
+      <div className='mb-10'>
+        <h1 className='text-6xl font-semibold tracking-tight'>PROMPTER CT PRO</h1>
+        <p className='text-white/60 mt-3 text-xl'>Apple-grade cinematic prompt operating system.</p>
+      </div>
+      <div className='grid lg:grid-cols-3 gap-6'>
+        <Card className='lg:col-span-2 bg-white/5 border-white/10 rounded-3xl'><CardContent className='p-8 space-y-8'>
+          <section><h2 className='text-xl mb-4'>AI Models</h2><Chips items={MODELS} selected={model} setSelected={setModel} single /></section>
+          <section><h2 className='text-xl mb-4'>Preset Packs</h2><Chips items={PRESETS} selected={preset} setSelected={setPreset} single /></section>
+          <section><h2 className='text-xl mb-4'>Mode</h2><Chips items={['Image','Motion','Transformation']} selected={mode} setSelected={setMode} single /></section>
+          <section><h2 className='text-xl mb-4'>Camera System</h2><Chips items={CAMERAS} selected={cams} setSelected={setCams} /></section>
+          <section><h2 className='text-xl mb-4'>Lighting</h2><Chips items={LIGHTS} selected={light} setSelected={setLight} single /></section>
+          <section><h2 className='text-xl mb-4'>Color Engine</h2><Chips items={COLORS} selected={color} setSelected={setColor} single /></section>
+          <section><h2 className='text-xl mb-4'>Environment FX</h2><Chips items={FX} selected={fx} setSelected={setFx} /></section>
+          <section><h2 className='text-xl mb-4'>Reference Director</h2><Input value={refNote} onChange={(e)=>setRefNote(e.target.value)} className='bg-white/10 border-0 rounded-2xl' /></section>
+        </CardContent></Card>
+        <Card className='bg-white/5 border-white/10 rounded-3xl'><CardContent className='p-8 space-y-4'>
+          <h2 className='text-2xl'>Prompt Output</h2>
+          <Textarea value={prompt} readOnly className='min-h-[700px] bg-white/10 border-0 rounded-2xl' />
+          <Button onClick={()=>navigator.clipboard.writeText(prompt)} className='w-full rounded-2xl'>Copy Prompt</Button>
+        </CardContent></Card>
+      </div>
+    </motion.div>
+  </div>
+}
