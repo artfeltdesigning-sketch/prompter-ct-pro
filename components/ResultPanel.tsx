@@ -1,21 +1,21 @@
 "use client";
 
-import type { AppState } from "../app/page";
-
 type Props = {
-  state: AppState;
+  output: string;
 };
 
-export default function ResultPanel({ state }: Props) {
+export default function ResultPanel({
+  output
+}: Props) {
   const copyPrompt = async () => {
-    if (!state.output) return;
-    await navigator.clipboard.writeText(state.output);
+    if (!output) return;
+    await navigator.clipboard.writeText(output);
   };
 
   const exportPrompt = () => {
-    if (!state.output) return;
+    if (!output) return;
 
-    const blob = new Blob([state.output], {
+    const blob = new Blob([output], {
       type: "text/plain"
     });
 
@@ -30,29 +30,38 @@ export default function ResultPanel({ state }: Props) {
   };
 
   return (
-    <aside className="result-panel">
-      <div className="result-top">
-        <h2>AI Output Console</h2>
-        <div className="mini-badge">LIVE</div>
-      </div>
+    <aside className="result-panel glass-panel">
+      <div className="result-header">
+        <div>
+          <h2>AI Output Console</h2>
+          <p>Production-grade prompt output</p>
+        </div>
 
-      <div className="decoded-box">
-        <div className="decoded-title">AI DECODED INTENT</div>
-        <p>
-          {state.decodedIntent ||
-            "AI understanding will appear here after generation."}
-        </p>
+        <div className="live-badge">
+          LIVE
+        </div>
       </div>
 
       <textarea
-        value={state.output}
         readOnly
-        placeholder="Production-grade prompt output will appear here..."
+        value={output}
+        placeholder="AI generated premium prompt will appear here..."
       />
 
-      <div className="actions">
-        <button onClick={copyPrompt}>Copy Prompt</button>
-        <button onClick={exportPrompt}>Export TXT</button>
+      <div className="action-row">
+        <button
+          className="primary-btn"
+          onClick={copyPrompt}
+        >
+          Copy Prompt
+        </button>
+
+        <button
+          className="secondary-btn"
+          onClick={exportPrompt}
+        >
+          Export TXT
+        </button>
       </div>
     </aside>
   );
